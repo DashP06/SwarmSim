@@ -7,15 +7,22 @@ from agent import BirdAgent
 
 class BirdModel(mesa.Model):
 
-    def __init__(self, n, width, height, seed=None):
+    def __init__(
+            self, 
+            population_size=100, 
+            width=100, 
+            height=100, 
+            speed=1, 
+            seed=None
+        ):
         super().__init__(seed=seed)
-        self.num_agents = n
+        self.num_agents = population_size
         self.space = mesa.space.ContinuousSpace(width, height, torus=True)
 
         # Create agents
-        agents = BirdAgent.create_agents(model=self, n=n)
-        x = self.rng.random(n) * width # N-length array of x positions
-        y = self.rng.random(n) * height
+        agents = BirdAgent.create_agents(self, population_size, speed)
+        x = self.rng.random(population_size) * width # N-length array of x positions
+        y = self.rng.random(population_size) * height
         for a, i, j in zip(agents, x, y):
             self.space.place_agent(a, (i, j))
 
