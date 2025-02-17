@@ -1,64 +1,57 @@
-# App taken from https://mesa.readthedocs.io/stable/examples/basic/boid_flockers.html
+# Use pygame instead of solara
 
-import os
-import sys
+# import os
+# import sys
 
-sys.path.insert(0, os.path.abspath("../../../.."))
-from mesa.visualization import Slider, SolaraViz, make_space_component
+# sys.path.insert(0, os.path.abspath("../../../.."))
+# from mesa.visualization import Slider, SolaraViz, make_space_component
+import pygame
+pygame.init()
 
 from model import BirdModel
 
-# starter_model = BirdModel(n=1, width=100, height=100)
-# for _ in range(10):
-#     starter_model.step()
+WINDOW_WIDTH = 500
+WINDOW_HEIGHT = 500
 
-def boid_draw(agent):
-    return {"color": "green", "size": 20}
+screen = pygame.display.set_mode([WINDOW_WIDTH, WINDOW_HEIGHT])
+clock = pygame.time.Clock()
+canvas = pygame.Surface((WINDOW_WIDTH, WINDOW_HEIGHT))
+canvas.fill((255, 255, 255))
+font = pygame.font.SysFont("Arial" , 18 , bold = True)
 
-model_params = {
-    "seed": {
-        "type": "InputText",
-        "value": 42,
-        "label": "Random Seed",
-    },
-    "population_size": Slider(
-        label="Number of boids",
-        value=100,
-        min=10,
-        max=200,
-        step=10,
-    ),
-    "width": 100,
-    "height": 100,
-    "speed": Slider(
-        label="Speed of Boids",
-        value=5,
-        min=1,
-        max=20,
-        step=1,
-    ) # ,
-    # "vision": Slider(
-    #     label="Vision of Bird (radius)",
-    #     value=10,
-    #     min=1,
-    #     max=50,
-    #     step=1,
-    # ),
-    # "separation": Slider(
-    #     label="Minimum Separation",
-    #     value=2,
-    #     min=1,
-    #     max=20,
-    #     step=1,
-    # ),
-}
 
-model = BirdModel()
+starter_model = BirdModel(population_size=10, width=WINDOW_WIDTH, height=WINDOW_HEIGHT)
 
-page = SolaraViz(
-    model,
-    components=[make_space_component(agent_portrayal=boid_draw, backend="matplotlib")],
-    model_params=model_params,
-    name="Bird Flocking Model",
-)
-page
+# Count FPS
+def fps_counter():
+    fps = str(int(clock.get_fps()))
+    fps_t = font.render(fps , 1, pygame.Color("RED"))
+    screen.blit(fps_t,(0,0))
+
+running = True
+while running:
+    # Check for user pressing the X button
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+
+    starter_model.step()
+
+    # Fill screen with white
+    canvas.fill((255, 255, 255)) 
+
+    # Draw each agent to the screen
+    for agent in starter_model.agents:
+        x, y = agent.pos
+        pygame.draw.circle(canvas, (0, 0, 0), (int(x), int(y)), 2.5)
+
+    screen.blit(canvas, (0, 0))
+    fps_counter()
+    pygame.display.flip()
+
+    # Set FPS
+
+    clock.tick_busy_loop(60)
+
+
+pygame.quit()
