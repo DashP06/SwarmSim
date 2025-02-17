@@ -5,13 +5,17 @@
 
 # sys.path.insert(0, os.path.abspath("../../../.."))
 # from mesa.visualization import Slider, SolaraViz, make_space_component
+import numpy as np
 import pygame
 pygame.init()
 
 from model import BirdModel
 
-WINDOW_WIDTH = 500
+WINDOW_WIDTH = 800
 WINDOW_HEIGHT = 500
+POP_SIZE = 50
+BIRD_SPEED = 1
+BIRD_TURN_SPEED = np.deg2rad(5)
 
 screen = pygame.display.set_mode([WINDOW_WIDTH, WINDOW_HEIGHT])
 clock = pygame.time.Clock()
@@ -20,7 +24,7 @@ canvas.fill((255, 255, 255))
 font = pygame.font.SysFont("Arial" , 18 , bold = True)
 
 
-starter_model = BirdModel(population_size=10, width=WINDOW_WIDTH, height=WINDOW_HEIGHT)
+model = BirdModel(POP_SIZE, WINDOW_WIDTH, WINDOW_HEIGHT, BIRD_SPEED, BIRD_TURN_SPEED)
 
 # Count FPS
 def fps_counter():
@@ -35,13 +39,13 @@ while running:
         if event.type == pygame.QUIT:
             running = False
 
-    starter_model.step()
+    model.step()
 
     # Fill screen with white
     canvas.fill((255, 255, 255)) 
 
     # Draw each agent to the screen
-    for agent in starter_model.agents:
+    for agent in model.agents:
         x, y = agent.pos
         pygame.draw.circle(canvas, (0, 0, 0), (int(x), int(y)), 2.5)
 

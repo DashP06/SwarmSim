@@ -13,6 +13,7 @@ class BirdModel(mesa.Model):
             width=100, 
             height=100, 
             speed=1, 
+            turn_speed=1,
             seed=None
         ):
         super().__init__(seed=seed)
@@ -20,7 +21,7 @@ class BirdModel(mesa.Model):
         self.space = mesa.space.ContinuousSpace(width, height, torus=True)
 
         # Create agents
-        agents = BirdAgent.create_agents(self, population_size, speed)
+        agents = BirdAgent.create_agents(self, population_size, speed, turn_speed)
         x = self.rng.random(population_size) * width # N-length array of x positions
         y = self.rng.random(population_size) * height
         for a, i, j in zip(agents, x, y):
