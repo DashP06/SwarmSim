@@ -22,5 +22,4 @@ class BirdModel(mesa.Model):
     def step(self):
         """Advance the model by one step"""
         self.agents.shuffle_do("say_hi")
-
-    
+        
