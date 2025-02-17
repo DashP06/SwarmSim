@@ -16,6 +16,8 @@ WINDOW_HEIGHT = 500
 POP_SIZE = 50
 BIRD_SPEED = 1
 BIRD_TURN_SPEED = np.deg2rad(5)
+VISION = 50
+ALIGN_FACTOR = 0.05
 
 screen = pygame.display.set_mode([WINDOW_WIDTH, WINDOW_HEIGHT])
 clock = pygame.time.Clock()
@@ -24,7 +26,7 @@ canvas.fill((255, 255, 255))
 font = pygame.font.SysFont("Arial" , 18 , bold = True)
 
 
-model = BirdModel(POP_SIZE, WINDOW_WIDTH, WINDOW_HEIGHT, BIRD_SPEED, BIRD_TURN_SPEED)
+model = BirdModel(POP_SIZE, WINDOW_WIDTH, WINDOW_HEIGHT, BIRD_SPEED, BIRD_TURN_SPEED, VISION, ALIGN_FACTOR)
 
 # Count FPS
 def fps_counter():
